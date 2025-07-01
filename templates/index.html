@@ -1,0 +1,386 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Soundscape Model Training - Data Collection</title>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family: "Arial", sans-serif;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        min-height: 100vh;
+        padding: 20px;
+      }
+
+      .container {
+        max-width: 1200px;
+        margin: 0 auto;
+        background: white;
+        border-radius: 15px;
+        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+        overflow: hidden;
+      }
+
+      .header {
+        background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+        color: white;
+        padding: 40px;
+        text-align: center;
+      }
+
+      .header h1 {
+        font-size: 2.5em;
+        margin-bottom: 10px;
+        font-weight: 300;
+      }
+
+      .header p {
+        font-size: 1.2em;
+        opacity: 0.9;
+      }
+
+      .instructions {
+        background: #f8f9fa;
+        border-left: 4px solid #4facfe;
+        padding: 30px;
+        margin: 30px;
+        border-radius: 10px;
+      }
+
+      .instructions h2 {
+        color: #2c3e50;
+        margin-bottom: 15px;
+        font-size: 1.5em;
+      }
+
+      .instructions p {
+        color: #555;
+        line-height: 1.6;
+        margin-bottom: 10px;
+      }
+
+      .audio-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+        gap: 25px;
+        padding: 30px;
+      }
+
+      .audio-card {
+        background: white;
+        border-radius: 15px;
+        padding: 25px;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+        border: 1px solid #e9ecef;
+        transition: all 0.3s ease;
+      }
+
+      .audio-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+      }
+
+      .audio-card h3 {
+        color: #2c3e50;
+        margin-bottom: 15px;
+        font-size: 1.3em;
+        font-weight: 600;
+      }
+
+      .audio-controls {
+        margin-bottom: 20px;
+      }
+
+      audio {
+        width: 100%;
+        border-radius: 8px;
+        outline: none;
+      }
+
+      .rating-section {
+        margin-bottom: 20px;
+      }
+
+      .rating-label {
+        display: block;
+        color: #555;
+        margin-bottom: 10px;
+        font-weight: 500;
+      }
+
+      .rating-stars {
+        display: flex;
+        gap: 5px;
+        margin-bottom: 15px;
+      }
+
+      .star {
+        font-size: 24px;
+        color: #ddd;
+        cursor: pointer;
+        transition: color 0.2s ease;
+      }
+
+      .star:hover,
+      .star.active {
+        color: #ffd700;
+      }
+
+      .rating-text {
+        font-size: 0.9em;
+        color: #666;
+        margin-top: 5px;
+      }
+
+      .submit-btn {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        border: none;
+        padding: 12px 25px;
+        border-radius: 8px;
+        cursor: pointer;
+        font-size: 1em;
+        font-weight: 500;
+        transition: all 0.3s ease;
+        width: 100%;
+      }
+
+      .submit-btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+      }
+
+      .submit-btn:disabled {
+        background: #ccc;
+        cursor: not-allowed;
+        transform: none;
+        box-shadow: none;
+      }
+
+      .success-message {
+        background: #d4edda;
+        color: #155724;
+        padding: 10px;
+        border-radius: 5px;
+        margin-top: 10px;
+        display: none;
+      }
+
+      .error-message {
+        background: #f8d7da;
+        color: #721c24;
+        padding: 10px;
+        border-radius: 5px;
+        margin-top: 10px;
+        display: none;
+      }
+
+      .footer {
+        background: #2c3e50;
+        color: white;
+        text-align: center;
+        padding: 20px;
+        font-size: 0.9em;
+      }
+
+      @media (max-width: 768px) {
+        .audio-grid {
+          grid-template-columns: 1fr;
+          padding: 20px;
+        }
+
+        .header {
+          padding: 30px 20px;
+        }
+
+        .header h1 {
+          font-size: 2em;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <div class="header">
+        <h1>🎵 Soundscape Model Training</h1>
+        <p>Help us improve our AI soundscape generation model</p>
+      </div>
+
+      <div class="instructions">
+        <h2>📋 Instructions</h2>
+        <p>
+          <strong
+            >Welcome to our soundscape model training data collection!</strong
+          >
+        </p>
+        <p>
+          We're collecting human feedback to improve our AI-generated soundscape
+          model through Reinforcement Learning from Human Feedback (RLHF).
+        </p>
+        <p><strong>How to participate:</strong></p>
+        <p>• Listen to each audio clip using the play button</p>
+        <p>• Rate the quality and realism of the soundscape from 0-5 stars</p>
+        <p>• 0 = Very poor quality, 5 = Excellent, very realistic</p>
+        <p>
+          • Consider factors like: natural sound quality, realism, immersion,
+          and overall pleasantness
+        </p>
+        <p>• Click submit to save your rating</p>
+        <p>
+          <strong
+            >Your feedback helps train our model to generate better
+            soundscapes!</strong
+          >
+        </p>
+      </div>
+
+      <div class="audio-grid">
+        {% for audio in audio_files %}
+        <div class="audio-card">
+          <h3>{{ audio.title }}</h3>
+
+          <div class="audio-controls">
+            <audio controls preload="metadata">
+              <source
+                src="/static/audio/{{ audio.filename }}"
+                type="audio/mpeg"
+              />
+              Your browser does not support the audio element.
+            </audio>
+          </div>
+
+          <div class="rating-section">
+            <label class="rating-label">Rate this soundscape:</label>
+            <div class="rating-stars" data-audio-id="{{ audio.id }}">
+              <span class="star" data-rating="1">★</span>
+              <span class="star" data-rating="2">★</span>
+              <span class="star" data-rating="3">★</span>
+              <span class="star" data-rating="4">★</span>
+              <span class="star" data-rating="5">★</span>
+            </div>
+            <div class="rating-text">
+              Selected rating: <span class="current-rating">None</span>
+            </div>
+          </div>
+
+          <button
+            class="submit-btn"
+            onclick="submitReview({{ audio.id }}, '{{ audio.filename }}', '{{ audio.title }}')"
+          >
+            Submit Review
+          </button>
+
+          <div class="success-message" id="success-{{ audio.id }}">
+            ✅ Review submitted successfully!
+          </div>
+          <div class="error-message" id="error-{{ audio.id }}">
+            ❌ Error submitting review. Please try again.
+          </div>
+        </div>
+        {% endfor %}
+      </div>
+
+      <div class="footer">
+        <p>Thank you for contributing to our soundscape model training! 🎶</p>
+      </div>
+    </div>
+
+    <script>
+      // Rating system
+      document.querySelectorAll(".rating-stars").forEach((starContainer) => {
+        const stars = starContainer.querySelectorAll(".star");
+        const ratingText =
+          starContainer.parentElement.querySelector(".current-rating");
+        let currentRating = 0;
+
+        stars.forEach((star, index) => {
+          star.addEventListener("click", () => {
+            currentRating = index + 1;
+            updateStars(stars, currentRating);
+            ratingText.textContent = `${currentRating}/5`;
+            starContainer.dataset.rating = currentRating;
+          });
+
+          star.addEventListener("mouseover", () => {
+            updateStars(stars, index + 1);
+          });
+        });
+
+        starContainer.addEventListener("mouseleave", () => {
+          updateStars(stars, currentRating);
+        });
+      });
+
+      function updateStars(stars, rating) {
+        stars.forEach((star, index) => {
+          if (index < rating) {
+            star.classList.add("active");
+          } else {
+            star.classList.remove("active");
+          }
+        });
+      }
+
+      // Submit review function
+      async function submitReview(audioId, filename, title) {
+        const ratingContainer = document.querySelector(
+          `[data-audio-id="${audioId}"]`
+        );
+        const rating = ratingContainer.dataset.rating;
+        const submitBtn = event.target;
+        const successMsg = document.getElementById(`success-${audioId}`);
+        const errorMsg = document.getElementById(`error-${audioId}`);
+
+        // Hide previous messages
+        successMsg.style.display = "none";
+        errorMsg.style.display = "none";
+
+        if (!rating) {
+          errorMsg.textContent = "❌ Please select a rating first.";
+          errorMsg.style.display = "block";
+          return;
+        }
+
+        // Disable button during submission
+        submitBtn.disabled = true;
+        submitBtn.textContent = "Submitting...";
+
+        try {
+          const response = await fetch("/submit_review", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              audio_file: filename,
+              title: title,
+              rating: parseInt(rating),
+            }),
+          });
+
+          const result = await response.json();
+
+          if (response.ok) {
+            successMsg.style.display = "block";
+            submitBtn.textContent = "Submitted ✓";
+            submitBtn.style.background = "#28a745";
+          } else {
+            throw new Error(result.error || "Submission failed");
+          }
+        } catch (error) {
+          console.error("Error:", error);
+          errorMsg.textContent = `❌ ${error.message}`;
+          errorMsg.style.display = "block";
+          submitBtn.disabled = false;
+          submitBtn.textContent = "Submit Review";
+        }
+      }
+    </script>
+  </body>
+</html>
